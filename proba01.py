@@ -8,11 +8,11 @@ import random
 
 #CONSTANTES
 
-ANCHO_CADRO = 10
-ALTO_CADRO = 10
+ANCHO_CADRO = 30
+ALTO_CADRO = 30
 
-CADROS_FILA = 50
-CADROS_COLUMNA = 40
+CADROS_FILA = 15
+CADROS_COLUMNA = 10
 
 ANCHO_VENTANA = CADROS_FILA * ANCHO_CADRO
 ALTO_VENTANA = CADROS_COLUMNA * ALTO_CADRO
@@ -81,15 +81,24 @@ def main():
 			
 		pos_mouse = pygame.mouse.get_pos()
 		
+		ancho_ventana_gl = ANCHO_VENTANA+zoom*2
+		alto_ventana_gl = ALTO_VENTANA+zoom*2
+		
+		marco_zoom_x = zoom * ANCHO_VENTANA / ancho_ventana_gl
+		marco_zoom_y = zoom * ALTO_VENTANA / alto_ventana_gl
+		
 		if ((pygame.mouse.get_pressed()[0] or pygame.mouse.get_pressed()[2]) and
-			(pos_mouse[0]-pos_camara[0]-zoom > 0 and pos_mouse[0]-pos_camara[0]+zoom < ANCHO_VENTANA 
-			and pos_mouse[1]+pos_camara[1]-zoom > 0 and pos_mouse[1]+pos_camara[1]+zoom < ALTO_VENTANA)):
+			(pos_mouse[0]-pos_camara[0] > marco_zoom_x and pos_mouse[0]-pos_camara[0] < ANCHO_VENTANA-marco_zoom_x
+			and pos_mouse[1]+pos_camara[1] > marco_zoom_y and pos_mouse[1]+pos_camara[1] < ALTO_VENTANA-marco_zoom_y)):
 			
-			ancho_ventana_gl = ANCHO_VENTANA+zoom*2
-			alto_ventana_gl = ALTO_VENTANA+zoom*2
+			ancho_rejilla = ANCHO_VENTANA * ANCHO_VENTANA / ancho_ventana_gl
+			alto_rejilla = ALTO_VENTANA * ALTO_VENTANA / alto_ventana_gl
+			
+			ancho_cadro_gl = ancho_rejilla / CADROS_FILA
+			alto_cadro_gl = alto_rejilla / CADROS_COLUMNA
 		
 			lista_rectangulos = []
-			cadro_presionado = [(pos_mouse[0]-pos_camara[0])/ANCHO_CADRO,(pos_mouse[1]+pos_camara[1])/ALTO_CADRO]
+			cadro_presionado = [(pos_mouse[0]-pos_camara[0]-marco_zoom_x)/ancho_cadro_gl,(pos_mouse[1]+pos_camara[1]-marco_zoom_y)/alto_cadro_gl]
 			indice = pos_a_indice(cadro_presionado)
 			
 			if pygame.mouse.get_pressed()[0] and (indice < len(lista_cadros) and indice >= 0):
