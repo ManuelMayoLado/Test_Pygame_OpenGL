@@ -57,6 +57,8 @@ def main():
 		for i in lista_poligonos:
 			debuxar_poligono(i.listaVertices,i.color)
 		
+		debuxar_linhas_poligono()
+		
 		for i in lista_vertices:
 			debuxar_punto(i)
 			
@@ -171,6 +173,15 @@ def debuxar_poligono(listaVer,color):
 	for i in listaVer:
 		glVertex2f(i[0],i[1])
 	glEnd()
+	
+def debuxar_linhas_poligono():
+	if len(lista_vertices) > 1:
+		glColor4f(1, 1, 1, 0.5)
+		glBegin(GL_LINES)
+		for i in range(len(lista_vertices)):
+			glVertex2f(lista_vertices[i-1][0], lista_vertices[i-1][1])
+			glVertex2f(lista_vertices[i][0], lista_vertices[i][1])
+		glEnd()
 	
 def debuxar_cruz_central():
 	glLineWidth(1)
